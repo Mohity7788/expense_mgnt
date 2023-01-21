@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useState } from "react";
 const ExpenseList = (props) => {
-  const month = moment(props.date).format("MMM");
+  const month = moment(props.date).format("MMMM");
   const day = moment(props.date).format("DD");
   const year = moment(props.date).format("YYYY");
 

@@ -2,34 +2,36 @@ import CalenderHeader from "./CalenderHeader";
 import ExpenseList from "./ExpenseList";
 import "../../App.css";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Calender = () => {
-  const [expense, setExpense] = useState([
-    {
-      id: "e1",
-      title: "Party Suit",
-      price: 3500,
-      date: moment("12-05-2022"),
-    },
-    {
-      id: "e2",
-      title: "StarBucks",
-      price: 200,
-      date: moment("11-24-2022"),
-    },
-    {
-      id: "e3",
-      title: "Train Tickets",
-      price: 1200,
-      date: moment("12-03-2022"),
-    },
-  ]);
+  const [expense, setExpense] = useState([]);
+  function fetchData() {
+    fetch("http://localhost:4000/Students")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setExpense(data);
+      });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const expenseDetails = (model) => {
-    debugger;
-    model.id = (expense.length + 1).toString();
-    let newList = [model, ...expense];
-    setExpense(newList, () => {});
+    // model.id = (expense.length + 1).toString();
+    // let newList = [model, ...expense];
+    // setExpense(newList, () => {});
+    fetch("http://localhost:4000/Students", {
+      method: "POST",
+      body: JSON.stringify(model),
+      headers: {
+        "content-Type": "application/json",
+      },
+    }).then((res) => fetchData());
   };
   console.log("expense", expense);
   return (
@@ -41,9 +43,10 @@ const Calender = () => {
             {expense.map((item) => {
               return (
                 <ExpenseList
+                  key={item.id}
                   title={item.title}
                   ammount={item.price}
-                  date={item.date}
+                  date={moment(item.date)}
                 />
               );
             })}

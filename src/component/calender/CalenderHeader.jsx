@@ -1,9 +1,11 @@
 import moment from "moment/moment";
 import { useState } from "react";
+import "../../App.css";
 const CalenderHeader = (props) => {
   const [enterTitle, setEnterTitle] = useState("");
   const [enterAmmont, setEnterAmount] = useState("");
   const [enterDate, setEnterDate] = useState("");
+  const [warning, setWarning] = useState("");
 
   function getTitle(e) {
     setEnterTitle(e.target.value);
@@ -17,17 +19,26 @@ const CalenderHeader = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const expenseData = {
-      title: enterTitle,
-      price: enterAmmont,
-      date: moment(enterDate),
-    };
-    props.expenseDetails(expenseData);
+    if (
+      enterTitle.length !== 0 &&
+      enterAmmont.length !== 0 &&
+      enterDate.length !== 0
+    ) {
+      const expenseData = {
+        title: enterTitle,
+        price: enterAmmont,
+        date: moment(enterDate),
+      };
+      props.expenseDetails(expenseData);
 
-    console.log(expenseData);
-    setEnterTitle("");
-    setEnterAmount("");
-    setEnterDate("");
+      console.log(expenseData);
+      setWarning("");
+      setEnterTitle("");
+      setEnterAmount("");
+      setEnterDate("");
+    } else {
+      setWarning("Please provide the all details");
+    }
   };
 
   return (
@@ -51,6 +62,7 @@ const CalenderHeader = (props) => {
             </div>
             <div className="form_btn">
               <button type="submit">Add Expense</button>
+              <div className="warning">{warning}</div>
             </div>
           </form>
         </div>
